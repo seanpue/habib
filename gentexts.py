@@ -15,7 +15,7 @@ for line in open('ghalib-concordance/output/lemma_documents.txt').readlines():
 stoplist=['lenaa','honaa','karnaa','ko','jis','jo','kih','kyaa','me;n','par','to','nahii;n','kaa','har','kis','kii','nah',          'aur',
 'tamaam',
 'bhii',
-
+';haalaa;nkih',
 'chaahiye',
 'hogaa',
 'rahnaa',
@@ -88,7 +88,15 @@ stoplist=['lenaa','honaa','karnaa','ko','jis','jo','kih','kyaa','me;n','par','to
 'jitnaa',
 'saknaa',
 'meraa',
-'apnaa']
+'apnaa'
+'phir',
+'bah',
+'pah',
+'milnaa',
+'phir',
+'aanaa'
+
+]
 
 
 texts = [[word for word in document.lower().split() if word not in stoplist]
@@ -120,6 +128,34 @@ for x in s:
     count = all_tokens.count(x)
     if count>5:
         print "'"+x+"',"
+
+# <codecell>
+
+dictionary = corpora.Dictionary(texts)
+
+# <codecell>
+
+dictionary.save('tmp/ghalib.dict')
+
+# <codecell>
+
+print(dictionary)
+
+# <codecell>
+
+print(dictionary.token2id)
+
+# <codecell>
+
+corpus = [dictionary.doc2bow(text) for text in texts]
+
+# <codecell>
+
+lda = gensim.models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary, num_topics=10, update_every=1, chunksize=1, passes=5)
+
+# <codecell>
+
+lda.print_topics(10)
 
 # <codecell>
 
